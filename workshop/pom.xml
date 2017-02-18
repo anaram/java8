@@ -28,9 +28,10 @@
 		<jruby.version>1.7.25</jruby.version>
 		<revealjs.version>3.1.0</revealjs.version>
 		<asciidoctor-revealjs.version>master</asciidoctor-revealjs.version>
+		<project.slides.directory>${project.build.directory}/generated-docs</project.slides.directory>
 
 		<!-- Locations -->
-		<testDir>${basedir}/src/main/java</testDir>
+		<testDir>${basedir}/src/test/java</testDir>
 		<testPackageDir>${testDir}/com/toughbyte/workshop</testPackageDir>
 	</properties>
 
@@ -113,7 +114,7 @@
 				<executions>
 					<execution>
 						<id>generate-slides</id>
-						<phase>process-resources</phase>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>process-asciidoc</goal>
 						</goals>
@@ -130,9 +131,14 @@
 								<sourcedir>${basedir}/src/main/java</sourcedir>
 								<testDir>${testDir}</testDir>
 								<testPackageDir>${testPackageDir}</testPackageDir>
-								<revealjs_theme>black</revealjs_theme>
+								<testLog>${project.build.directory}/tests.log</testLog>
+								<revealjs_theme>sky</revealjs_theme>
 								<revealjs_transition>linear</revealjs_transition>
+								<revealjs_margin>0</revealjs_margin>
+								<revealjs_width>1200</revealjs_width>
+								<revealjs_height>800</revealjs_height>
 								<project-version>${project.version}</project-version>
+								<icons>font</icons>
 							</attributes>
 						</configuration>
 					</execution>

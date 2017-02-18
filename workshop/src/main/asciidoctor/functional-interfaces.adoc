@@ -1,8 +1,0 @@
-= Functional Interfaces
-
-== Runnable
-
-[source,java]
-----
-include::{testDir}/com/toughbyte/workshop
-----

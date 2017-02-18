@@ -17,7 +17,7 @@ public class DocumentationRule implements TestRule {
 			@Override
 			public void evaluate() throws Throwable {
 				String name = description.getMethodName() == null ? description.getMethodName()
-						: description.getClassName() + "-" + description.getMethodName();
+						: description.getTestClass().getSimpleName() + "-" + description.getMethodName();
 				try {
 					LOG.info("tag::{}[]", name);
 					base.evaluate();

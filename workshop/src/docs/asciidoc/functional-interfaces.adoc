@@ -1,0 +1,287 @@
+== Functional Interfaces
+
+//ifdef::backend-revealjs[=== !]
+
+=== What?
+
+Functional interfaces have a single functionality to exhibit. This means they have exactly one non-default method.
+
+@FunctionalInterface annotation may be used on an interface to generate compile-time warning if the interface is not functional.
+
+=== So...?
+
+Functional interfaces provide target types for lambda expressions
+
+Lambda expressions are more concise than anonymous inner classes
+
+Lambdas play a crucial role in the new stream API
+
+Many previously existing interfaces are also functional
+
+=== java.lang.Runnable
+
+[source,java]
+----
+@FunctionalInterface
+public interface Runnable {
+    /**
+     * When an object implementing interface <code>Runnable</code> is used
+     * to create a thread, starting the thread causes the object's
+     * <code>run</code> method to be called in that separately executing
+     * thread.
+     * <p>
+     * The general contract of the method <code>run</code> is that it may
+     * take any action whatsoever.
+     *
+     * @see     java.lang.Thread#run()
+     */
+    public abstract void run();
+}
+----
+
+=== How Lambdas Look
+
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=threadBefore,indent=0]
+----
+
+In Java8 becomes...
+
+[source,java,role="fragment"]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=threadAfter,indent=0]
+----
+
+=== How Streams Look
+
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=streamBefore,indent=0]
+----
+
+In Java8 becomes...
+
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=streamAfter,indent=0]
+----
+<1> Generate a stream of integers 0..4
+<2> Map integer to String
+<3> Collect values into a List
+
+
+== Some Functional Interfaces
+
+From default java packages
+
+=== java.lang.Runnable
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=runnable,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-runnable]
+----
+
+.before
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=runnableBefore,indent=0]
+----
+
+=== java.util.function.Supplier
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=supplier,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-supplier]
+----
+
+=== java.util.function.Consumer
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=consumer,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-consumer]
+----
+
+=== java.util.function.Function
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=function,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-function]
+----
+
+=== java.util.function.Predicate
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=predicate,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-predicate]
+----
+
+=== java.util.function.BiConsumer
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=biConsumer,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-biConsumer]
+----
+
+=== java.util.function.BiFunction
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=biFunction,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-biFunction]
+----
+
+=== Dealing With Primitives
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=primitive,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-primitive]
+----
+
+=== Using Local Variables
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=local,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-local]
+----
+
+=== Syntax
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=syntax,indent=0]
+----
+
+=== Chaining
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=chaining,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-chaining]
+----
+
+== Method References
+
+Sometimes a lambda expression does nothing but call an existing method
+
+Method references can often make the code clearer in such situations
+
+They are compact, easy-to-read lambda expressions for methods that already have a name
+
+=== !
+
+[source,java]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=Student,indent=0]
+----
+
+=== Class Method References
+
+[source,java]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=classMethods-1,indent=0]
+----
+
+[source,java,role="fragment current-visible"]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=classMethods-2,indent=0]
+----
+
+[source,java,role="fragment"]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=classMethods-3,indent=0]
+----
+
+=== Instance Method References
+
+[source,java]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=instanceMethods-1,indent=0]
+----
+
+[source,java,role="fragment"]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=instanceMethods-2,indent=0]
+----
+
+=== DateTimeFormatter
+
+New Java 8 date & time API makes use of lambdas
+
+[source,java]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=dateTimeFormatter,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=MethodReferencesTest-dateTimeFormatter]
+----
+
+=== List
+
+Many methods are natural consumers and suppliers
+
+[source,java]
+----
+include::{testPackageDir}/MethodReferencesTest.java[tags=listAsConsumer,indent=0]
+----
