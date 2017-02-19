@@ -241,7 +241,7 @@ include::{testPackageDir}/MethodReferencesTest.java[tags=Student,indent=0]
 include::{testPackageDir}/MethodReferencesTest.java[tags=classMethods-1,indent=0]
 ----
 
-[source,java,role="fragment current-visible"]
+[source,java,role="fragment"]
 ----
 include::{testPackageDir}/MethodReferencesTest.java[tags=classMethods-2,indent=0]
 ----
@@ -285,3 +285,13 @@ Many methods are natural consumers and suppliers
 ----
 include::{testPackageDir}/MethodReferencesTest.java[tags=listAsConsumer,indent=0]
 ----
+
+=== LambdasExercise.java
+
+Remove @Ignore, fix tests
+
+[.fragment]
+Add convenience method to get all students as a list
+
+[.fragment]
+Add 'hidden' column to students.csv

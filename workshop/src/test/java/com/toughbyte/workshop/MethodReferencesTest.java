@@ -7,16 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.DoubleToLongFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -75,6 +70,7 @@ public class MethodReferencesTest {
     }
     // end::Student[]
 
+    @SuppressWarnings("unused")
     @Test
     public void classMethods() {
         // tag::classMethods[]
@@ -128,7 +124,7 @@ public class MethodReferencesTest {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime time = formatter.parse("2017-02-27 09:00:00", LocalDateTime::from);
         LOG.info("" + time.atZone(ZoneId.of("GMT")).toInstant());
-        // tag::dateTimeFormatter[]
+        // end::dateTimeFormatter[]
     }
 
     @Test
@@ -150,7 +146,7 @@ public class MethodReferencesTest {
         Assert.assertThat(students.size(), Matchers.equalTo(2));
         List<String> names = students.stream().map(Student::getName).collect(Collectors.toCollection(ArrayList::new));
         Assert.assertThat(names, Matchers.equalTo(Arrays.asList("Miko", "Molly")));
-        // tag::listAsConsumer[]
+        // end::listAsConsumer[]
     }
 
 }

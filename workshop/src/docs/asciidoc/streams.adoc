@@ -1,0 +1,113 @@
+== Streams
+
+[.fragment]
+Streams are an integral part of bringing functional programming to Java
+
+[.fragment]
+Lazy evaluation
+
+[.fragment]
+Can be made from collections or with generators
+
+[.fragment]
+Can be parallel
+
+=== Example Stream
+
+.code
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=intStream,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=StreamsTest-intStream]
+----
+
+=== Collect, Map
+
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=collect-1,indent=0]
+----
+
+[source,java,role="fragment"]
+----
+include::{testPackageDir}/StreamsTest.java[tags=collect-2,indent=0]
+----
+
+=== Reduce
+
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=reduce,indent=0]
+----
+
+New static methods were added (operators like `+` are also available as functions)
+
+[.fragment]
+Stream can be filtered...
+
+[source,java,role="fragment"]
+----
+include::{testPackageDir}/StreamsTest.java[tags=reduceFailed,indent=0]
+----
+
+=== limit
+
+.code
+----
+include::{testPackageDir}/StreamsTest.java[tags=limit,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=StreamsTest-limit]
+----
+
+== Grouping
+
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=tuple,indent=0]
+----
+
+ifdef::backend-revealjs[=== !]
+
+.code
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=groupingList,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=StreamsTest-groupingList]
+----
+
+ifdef::backend-revealjs[=== !]
+
+.code
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=groupingReduce,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=StreamsTest-groupingReduce]
+----
+
+=== Grouping>Partitioning
+
+.code
+[source,java]
+----
+include::{testPackageDir}/StreamsTest.java[tags=groupingPartitioning,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=StreamsTest-groupingPartitioning]
+----

@@ -1,0 +1,5 @@
+= Toughbyte Java 8 Workshop
+
+include::functional-interfaces.adoc[]
+
+include::streams.adoc[]
