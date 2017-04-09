@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory;
@@ -35,9 +36,9 @@ public class ParallelStreamsTest {
         Arrays.asList("Tim", "Tom").parallelStream();
         Stream.of("Tim", "Tom").parallel();
         StreamSupport.stream(Arrays.asList("Tim", "Tom").spliterator(), true);
-        // tag::creating[]
+        // end::creating[]
     }
-    
+
     @Test
     public void parallelForEach() {
         // tag::parallelForEach[]
@@ -45,19 +46,17 @@ public class ParallelStreamsTest {
         List<Integer> result = Collections.synchronizedList(new ArrayList<>());
         IntStream.range(0, 8).parallel().forEach(result::add);
         LOG.info("" + result);
-        // end::parallelForEach{]
+        // end::parallelForEach[]
     }
-    
+
     @Test
     public void parallelForEachOrdered() {
-        // tag::parallelForEach[]
-        // Result is not deterministic
+        // tag::parallelForEachOrdered[]
         List<Integer> result = Collections.synchronizedList(new ArrayList<>());
         IntStream.range(0, 8).parallel().forEachOrdered(result::add);
         LOG.info("" + result);
-        // end::parallelForEachOrdered{]
+        // end::parallelForEachOrdered[]
     }
-
 
     @Test
     public void parallelCollect() {
@@ -65,17 +64,17 @@ public class ParallelStreamsTest {
         List<Integer> result = IntStream.range(0, 8).parallel()
                 .mapToObj(Integer::valueOf).collect(Collectors.toList());
         LOG.info("" + result);
-        // end::parallelCollect{]
+        // end::parallelCollect[]
     }
 
     @Test
     public void parallelCollectUnordered() {
         // tag::parallelCollectUnordered[]
         // Result is not deterministic
-        List<Integer> result = IntStream.range(0, 100).parallel().unordered()
+        List<Integer> result = IntStream.range(0, 8).parallel().unordered()
                 .mapToObj(Integer::valueOf).collect(Collectors.toList());
         LOG.info("" + result);
-        // end::parallelCollectUnordered{]
+        // end::parallelCollectUnordered[]
     }
 
     @Test
@@ -84,7 +83,7 @@ public class ParallelStreamsTest {
         IntStream.range(0, 8).parallel().forEach(i -> {
             LOG.info("" + Thread.currentThread().getName());
         });
-        // end::threadNames{]
+        // end::threadNames[]
     }
 
     @Test
@@ -100,4 +99,14 @@ public class ParallelStreamsTest {
         task.join();
         // end::customForkJoinPool[]
     }
+
+    @Test
+    public void summaryStatistics() {
+        // tag::summaryStatistics[]
+        IntSummaryStatistics statistics = IntStream.range(0, 9876).parallel()
+                .summaryStatistics();
+        LOG.info("" + statistics);
+        // end::summaryStatistics[]
+    }
+
 }

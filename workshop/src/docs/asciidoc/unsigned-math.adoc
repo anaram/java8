@@ -1,0 +1,58 @@
+== Unsigned Math
+
+Unsigned math support in Java8
+
+No new types or primitives
+
+Methods that treat existing types as if they were unsigned
+
+Parse and print, divide
+
+=== Parse
+
+[source,java]
+----
+include::{testPackageDir}/UnsignedMathTests.java[tags=parse,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=UnsignedMathTests-parse]
+----
+
+=== Divide
+
+[source,java]
+----
+include::{testPackageDir}/UnsignedMathTests.java[tags=divide,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=UnsignedMathTests-divide]
+----
+
+=== Failed Parse (signed)
+
+[source,java]
+----
+include::{testPackageDir}/UnsignedMathTests.java[tags=failParseSignedInt,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=UnsignedMathTests-failParseSignedInt]
+----
+
+=== Failed Parse (signed)
+
+[source,java]
+----
+include::{testPackageDir}/UnsignedMathTests.java[tags=failParseUnsignedInt,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=UnsignedMathTests-failParseUnsignedInt]
+----
+
