@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>Parallel Streams</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js-3.1.0/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js-3.1.0/css/theme/sky.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><style>/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>Parallel Streams</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js-3.1.0/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js-3.1.0/css/theme/black.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><style>/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
 /*pre.CodeRay {background-color:#f7f7f8;}*/
 .CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
 .CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
@@ -86,130 +86,50 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .insert .insert{color:#080}
 .CodeRay .delete .delete{color:#800}
 .CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}</style><link href="reveal.js-3.1.0/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js-3.1.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section><section id="_parallel_streams"><h2>Parallel Streams</h2><div class="paragraph"><p>Parallel streams allow some stream operations to be performed concurrently</p></div><div class="paragraph"><p>Reading JavaDoc is useful to find out what stream operations are performed in encounter order</p></div></section><section id="_parallel_foreach"><h2>Parallel forEach</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">        <span class="comment">// Result is not deterministic</span>
-        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
-        IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(result::add);
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelForEach{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> parallelForEachOrdered() {
-        <span class="comment">// Result is not deterministic</span>
-        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
-        IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEachOrdered(result::add);
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelForEachOrdered{]</span>
-    }
-
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> parallelCollect() {
-        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel()
-                .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelCollect{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> parallelCollectUnordered() {
-        <span class="comment">// Result is not deterministic</span>
-        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">100</span>).parallel().unordered()
-                .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelCollectUnordered{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> threadNames() {
-        IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(i -&gt; {
-            LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-        });
-        <span class="comment">// end::threadNames{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> customForkJoinPool() {
-        ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(<span class="integer">2</span>);
-        ForkJoinTask&lt;?&gt; task = pool.submit(() -&gt; {
-            LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adding in thread: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-            IntStream.range(<span class="integer">0</span>, <span class="integer">4</span>).parallel().forEach(i -&gt; {
-                LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-            });
-        });
-        task.join();
-    }
-}</code></pre></div></div>
-<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[5, 2, 4, 3, 7, 6, 1, 0]</code></pre></div></div></section><section id="_parallel_collect"><h2>Parallel Collect</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel()
-                .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelCollect{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> parallelCollectUnordered() {
-        <span class="comment">// Result is not deterministic</span>
-        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">100</span>).parallel().unordered()
-                .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelCollectUnordered{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> threadNames() {
-        IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(i -&gt; {
-            LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-        });
-        <span class="comment">// end::threadNames{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> customForkJoinPool() {
-        ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(<span class="integer">2</span>);
-        ForkJoinTask&lt;?&gt; task = pool.submit(() -&gt; {
-            LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adding in thread: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-            IntStream.range(<span class="integer">0</span>, <span class="integer">4</span>).parallel().forEach(i -&gt; {
-                LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-            });
-        });
-        task.join();
-    }
-}</code></pre></div></div>
-<div class="listingblock fragment"><div class="content"><pre class="CodeRay"><code class="java language-java">        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel()
-                .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelCollect{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> parallelCollectUnordered() {
-        <span class="comment">// Result is not deterministic</span>
-        <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">100</span>).parallel().unordered()
-                .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
-        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);
-        <span class="comment">// end::parallelCollectUnordered{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> threadNames() {
-        IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(i -&gt; {
-            LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-        });
-        <span class="comment">// end::threadNames{]</span>
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> customForkJoinPool() {
-        ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(<span class="integer">2</span>);
-        ForkJoinTask&lt;?&gt; task = pool.submit(() -&gt; {
-            LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adding in thread: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-            IntStream.range(<span class="integer">0</span>, <span class="integer">4</span>).parallel().forEach(i -&gt; {
-                LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
-            });
-        });
-        task.join();
-    }
-}</code></pre></div></div></section></section></div></div><script src="reveal.js-3.1.0/lib/js/head.min.js"></script><script src="reveal.js-3.1.0/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+.CodeRay .head .head{color:#f4f}</style><link href="reveal.js-3.1.0/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js-3.1.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section><section id="_parallel_streams"><h2>Parallel Streams</h2><div class="paragraph"><p>Parallel streams allow many stream operations to be performed concurrently</p></div><div class="paragraph"><p>Reading JavaDoc is useful to find out what stream operations are performed in encounter order</p></div></section><section id="_creating"><h2>Creating</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">Tim</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Tom</span><span class="delimiter">&quot;</span></span>).parallelStream();
+Stream.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">Tim</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Tom</span><span class="delimiter">&quot;</span></span>).parallel();
+StreamSupport.stream(<span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">Tim</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Tom</span><span class="delimiter">&quot;</span></span>).spliterator(), <span class="predefined-constant">true</span>);</code></pre></div></div></section><section id="_foreach"><h2>forEach</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="comment">// Result is not deterministic</span>
+<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
+IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(result::add);
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[5, 7, 2, 3, 6, 4, 1, 0]</code></pre></div></div></section><section id="_foreachordered"><h2>forEachOrdered</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
+IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEachOrdered(result::add);
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[0, 1, 2, 3, 4, 5, 6, 7]</code></pre></div></div></section><section id="_parallel_collect"><h2>Parallel Collect</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel()
+        .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[0, 1, 2, 3, 4, 5, 6, 7]</code></pre></div></div></section><section id="_parallel_collect_unordered"><h2>Parallel Collect (Unordered)</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="comment">// Result is not deterministic</span>
+<span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().unordered()
+        .mapToObj(<span class="predefined-type">Integer</span>::valueOf).collect(Collectors.toList());
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[0, 1, 2, 3, 4, 5, 6, 7]</code></pre></div></div></section><section id="_java_util_concurrent_forkjoinpool"><h2>java.util.concurrent.ForkJoinPool</h2><div class="paragraph"><p>Used by parallel streaming</p></div>
+<div class="paragraph"><p>Either current pool or default pool is used</p></div>
+<div class="paragraph"><p>Task may be executed in the calling thread</p></div></section><section id="_threads_forkjoinpool"><h2>Threads (ForkJoinPool)</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(i -&gt; {
+    LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
+});</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>main
+ForkJoinPool.commonPool-worker-1
+ForkJoinPool.commonPool-worker-3
+ForkJoinPool.commonPool-worker-2
+main
+ForkJoinPool.commonPool-worker-1
+ForkJoinPool.commonPool-worker-3
+ForkJoinPool.commonPool-worker-2</code></pre></div></div></section><section id="_custom_forkjoinpool"><h2>Custom ForkJoinPool</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(<span class="integer">2</span>);
+ForkJoinTask&lt;?&gt; task = pool.submit(() -&gt; {
+    LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adding in thread: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
+    IntStream.range(<span class="integer">0</span>, <span class="integer">4</span>).parallel().forEach(i -&gt; {
+        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
+    });
+});
+task.join();</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>Adding in thread: ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-0</code></pre></div></div></section><section id="_statistics_on_parallel_streams"><h2>Statistics on parallel streams</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">IntSummaryStatistics statistics = IntStream.range(<span class="integer">0</span>, <span class="integer">9876</span>).parallel()
+        .summaryStatistics();
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + statistics);</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>IntSummaryStatistics{count=9876, sum=48762750, min=0, average=4937.500000, max=9875}</code></pre></div></div></section></section></div></div><script src="reveal.js-3.1.0/lib/js/head.min.js"></script><script src="reveal.js-3.1.0/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
   controls: true,
@@ -250,7 +170,7 @@ Reveal.initialize({
   previewLinks: false,
   // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
   // NOTE setting the theme in the config no longer works in reveal.js 3.x
-  //theme: Reveal.getQueryHash().theme || 'sky',
+  //theme: Reveal.getQueryHash().theme || 'black',
   // Transition style (e.g., none, fade, slide, convex, concave, zoom)
   transition: Reveal.getQueryHash().transition || 'linear',
   // Transition speed (e.g., default, fast, slow)
