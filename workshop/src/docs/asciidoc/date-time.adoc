@@ -1,0 +1,148 @@
+== New Date and Time API
+
+Based on Joda time
+
+[.fragment]
+ZonedDateTime and LocalDateTime
+
+[.fragment]
+Instant
+
+=== Year
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=year,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-year]
+----
+
+=== Year+Month
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=yearMonth,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-yearMonth]
+----
+
+=== LocalDate
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=localDate,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-localDate]
+----
+
+=== LocalTime
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=localTime,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-localTime]
+----
+
+=== LocalDateTime
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=localDateTime,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-localDateTime]
+----
+
+=== Instant
+
+Instant is as close to "epoch milliseconds" as we get
+
+[.fragment]
+Instant in time, absolute but not at any specific zone
+
+=== Need ZoneId
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=localDateTimeToInstantFails,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-localDateTimeToInstantFails]
+----
+
+=== With ZoneId
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=localDateTimeToInstantSuccess,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-localDateTimeToInstantSuccess]
+----
+
+=== Understand Time Zones
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=helsinki1917,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-helsinki1917]
+----
+
+=== Understand Time Zones (2)
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=helsinki2017,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-helsinki2017]
+----
+
+=== Adjusting Dates
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=adjusting,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-adjusting]
+----
+
+=== Lenient Parsing
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=lenient,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-lenient]
+----

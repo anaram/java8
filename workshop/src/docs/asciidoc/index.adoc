@@ -7,3 +7,7 @@ include::streams.adoc[]
 include::streams-intermission.adoc[]
 
 include::parallel-streams.adoc[]
+
+include::unsigned-math.adoc[]
+
+include::date-time.adoc[]

@@ -132,7 +132,7 @@
 								<testDir>${testDir}</testDir>
 								<testPackageDir>${testPackageDir}</testPackageDir>
 								<testLog>${project.build.directory}/tests.log</testLog>
-								<revealjs_theme>sky</revealjs_theme>
+								<revealjs_theme>black</revealjs_theme>
 								<revealjs_transition>linear</revealjs_transition>
 								<revealjs_margin>0</revealjs_margin>
 								<revealjs_width>1200</revealjs_width>

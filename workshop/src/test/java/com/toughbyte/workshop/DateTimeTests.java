@@ -10,9 +10,9 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalAdjuster;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class DateTimeTests {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM");
         YearMonth yearMonth = parser.parse("2016-06", YearMonth::from);
         LOG.info("yearMonth: " + yearMonth);
-        // tag::yearMonth[]
+        // end::yearMonth[]
     }
 
     @Test
@@ -51,7 +51,7 @@ public class DateTimeTests {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = parser.parse("2016-06-03", LocalDate::from);
         LOG.info("localDate: " + localDate);
-        // tag::localDate[]
+        // end::localDate[]
     }
 
     @Test
@@ -60,7 +60,7 @@ public class DateTimeTests {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalTime localTime = parser.parse("17:43:22", LocalTime::from);
         LOG.info("localTime: " + localTime);
-        // tag::localTime[]
+        // end::localTime[]
     }
 
     @Test
@@ -73,7 +73,7 @@ public class DateTimeTests {
         LOG.info("localDateTime: " + localDateTime);
         LOG.info("year: " + Year.from(localDateTime));
         LOG.info("localTime: " + LocalTime.from(localDateTime));
-        // tag::localDateTime[]
+        // end::localDateTime[]
     }
 
     @Test(expected = DateTimeException.class)
@@ -89,7 +89,7 @@ public class DateTimeTests {
             LOG.error(e.toString());
             throw e;
         }
-        // tag::localDateTimeToInstantFails[]
+        // end::localDateTimeToInstantFails[]
     }
 
     @Test
@@ -104,7 +104,7 @@ public class DateTimeTests {
                 + localDateTime.atZone(ZoneId.of("EET")).toInstant());
         LOG.info("epochMillis: " + localDateTime.atZone(ZoneId.of("EET"))
                 .toInstant().toEpochMilli());
-        // tag::localDateTimeToInstantSuccess[]
+        // end::localDateTimeToInstantSuccess[]
     }
 
     @Test
@@ -118,7 +118,7 @@ public class DateTimeTests {
                 ZonedDateTime::from);
         LOG.info("When: " + when);
         LOG.info("When: " + when.withZoneSameInstant(ZoneId.of("GMT")));
-        // tag::helsinki1917[]
+        // end::helsinki1917[]
     }
 
     @Test
@@ -132,7 +132,7 @@ public class DateTimeTests {
                 ZonedDateTime::from);
         LOG.info("When: " + when);
         LOG.info("When: " + when.withZoneSameInstant(ZoneId.of("GMT")));
-        // tag::helsinki2017[]
+        // end::helsinki2017[]
     }
 
     @Test
@@ -147,7 +147,7 @@ public class DateTimeTests {
         LOG.info("Original: " + when);
         LOG.info("Reyear: " + Year.of(1917).adjustInto(
                 when.withZoneSameLocal(ZoneId.of("Europe/Helsinki"))));
-        // tag::adjusting[]
+        // end::adjusting[]
     }
 
     @Test
@@ -156,7 +156,9 @@ public class DateTimeTests {
         DateTimeFormatter lenient = DateTimeFormatter
                 .ofPattern("yyyy[-MM[-dd['T'HH[:mm[:ss[.SSS]]]]]][ ][Z]")
                 .withZone(ZoneId.of("GMT"));
-        lenient.parse("2017");
+        YearMonth yearMonth = lenient.parse("2017-02", YearMonth::from);
+        LOG.info(lenient.format(yearMonth.atDay(7)));
+        LOG.info(lenient.format(yearMonth.atDay(7).atTime(12, 5, 7)));
         // end::lenient[]
     }
 }

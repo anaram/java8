@@ -17,7 +17,7 @@ public class UnsignedMathTests {
     public void parse() {
         // tag::parse[]
         int unsignedInt = Integer.parseUnsignedInt("3147483647");
-        LOG.info(String.format("Signed: %s", unsignedInt));
+        LOG.info(String.format("Signed:   %s", unsignedInt));
         LOG.info(String.format("Unsigned: %s",
                 Integer.toUnsignedString(unsignedInt)));
         // end::parse[]
@@ -27,7 +27,7 @@ public class UnsignedMathTests {
     public void divide() {
         // tag::divide[]
         int unsignedInt = Integer.parseUnsignedInt("3000000000");
-        LOG.info(String.format("Signed: %s",
+        LOG.info(String.format("Signed:   %s",
                 Integer.toUnsignedString(unsignedInt / 2)));
         LOG.info(String.format("Unsigned: %s", Integer
                 .toUnsignedString(Integer.divideUnsigned(unsignedInt, 2))));
