@@ -1,0 +1,113 @@
+== In Depth Look at Lambdas
+
+//ifdef::backend-revealjs[=== !]
+
+=== Anonymous Inner Class Structure
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=structureClass,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-structureClass]
+----
+
+Has reference to containing class
+
+=== Lambda Structure
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=structureLambda,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-structureLambda]
+----
+
+No reference to containing class
+
+=== Static Context
+
+Inner class in static context has no reference to parent object
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=staticContext,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-staticLikeStructureTest]
+----
+
+=== Let's not COPY-paste
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=INFO,indent=0]
+include::{testPackageDir}/IntermissionTest.java[tags=structureLogged,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-structureLogged]
+----
+
+=== Lambdas With Fields
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=structureUnary,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-structureUnary]
+----
+
+=== Serializing Lambdas
+
+Lambdas can be serialized if the implemented interface is Serializable
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=serializable,indent=0]
+----
+
+ifdef::backend-revealjs[=== !]
+
+----
+include::{testPackageDir}/IntermissionTest.java[tags=serialize,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-serialize]
+----
+
+=== Deserialize Lambdas
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=deserialize,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-deserialize]
+----
+
+=== Nashorn
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=nashorn,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-nashorn]
+----

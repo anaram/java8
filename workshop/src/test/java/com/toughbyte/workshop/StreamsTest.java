@@ -170,7 +170,7 @@ public class StreamsTest {
         LOG.info("" + mapped);
         // end::groupingPartitioning[]
     }
-    
+
     @Test
     public void summaryStatistics() {
         // tag::summaryStatistics[]
@@ -179,23 +179,24 @@ public class StreamsTest {
         LOG.info("" + statistics);
         // tag::summaryStatistics[]
     }
-    
+
     @Test
     public void max() {
         // tag::max[]
-        OptionalDouble max = DoubleStream.of(5.0, 6.0, 7.0, 8.8).reduce(Math::max);
+        OptionalDouble max = DoubleStream.of(5.0, 6.0, 7.0, 8.8)
+                .reduce(Math::max);
         LOG.info("" + max.getAsDouble());
         // tag::max[]
     }
-    
+
     @Test
     public void ищвф() {
         // tag::ouch[]
-        OptionalDouble ищвф = DoubleStream.of(5.0, 6.0, 7.0, 8.8).reduce(Math::max);
+        OptionalDouble ищвф = DoubleStream.of(5.0, 6.0, 7.0, 8.8)
+                .reduce(Math::max);
         LOG.info("" + ищвф.getAsDouble());
         // tag::ouch[]
     }
-
 
     // tag::tuple[]
     public static final class Tuple {

@@ -1,21 +1,30 @@
 package com.toughbyte.workshop;
 
-import java.beans.IntrospectionException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Reader;
 import java.io.Serializable;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.Function;
 import java.util.function.LongUnaryOperator;
 import java.util.stream.Stream;
+
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleScriptContext;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,39 +42,43 @@ public class IntermissionTest {
     private static final Logger LOG = LoggerFactory
             .getLogger(IntermissionTest.class);
 
+    // tag::INFO[]
+    private static final Consumer<Object> INFO = o -> LOG.info("" + o);
+    // end::INFO[]
+
     @Rule
     public DocumentationRule documentationRule = new DocumentationRule();
 
     @Test
-    public void structure() throws IntrospectionException {
-        {
-            // tag::structure-lambda[]
-            LongUnaryOperator op = val -> val + 3;
-            LOG.info("lambda: " + op.getClass());
+    public void structureClass() {
+        // tag::structureClass[]
+        LongUnaryOperator op = new LongUnaryOperator() {
 
-            Field[] fields = op.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                LOG.info("field: " + field);
+            @Override
+            public long applyAsLong(long operand) {
+                return operand + 3;
             }
-            // end::structure-lambda[]
-        }
-        {
-            // tag::structure-class[]
-            LongUnaryOperator op = new LongUnaryOperator() {
+        };
+        LOG.info("anonymous inner class: " + op.getClass());
 
-                @Override
-                public long applyAsLong(long operand) {
-                    return operand + 3;
-                }
-            };
-            LOG.info("anonymous inner class: " + op.getClass());
-
-            Field[] fields = op.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                LOG.info("field: " + field);
-            }
-            // end::structure-class[]
+        Field[] fields = op.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            LOG.info("field: " + field);
         }
+        // end::structureClass[]
+    }
+
+    @Test
+    public void structureLambda() {
+        // tag::structureLambda[]
+        LongUnaryOperator op = val -> val + 3;
+        LOG.info("lambda: " + op.getClass());
+
+        Field[] fields = op.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            LOG.info("field: " + field);
+        }
+        // end::structureLambda[]
     }
 
     @Test
@@ -82,11 +95,11 @@ public class IntermissionTest {
 
     @Test
     public void staticLikeStructureTest() {
-        staticLikeStructure();
+        staticContext();
     }
 
-    public static void staticLikeStructure() {
-        // tag::staticLikeStructure[]
+    // tag::staticContext[]
+    public static void staticContext() {
         LongUnaryOperator op = new LongUnaryOperator() {
 
             @Override
@@ -100,19 +113,33 @@ public class IntermissionTest {
         for (Field field : fields) {
             LOG.info("'static' anonymous inner class: " + field);
         }
-        // end::staticLikeStructure[]
     }
+    // end::staticContext[]
+
+    // tag::structureUnary[]
+    private double priv = 1.0;
+
+    @Test
+    public void structureUnary() {
+        double x = 1.0;
+        long y = 2;
+        DoubleUnaryOperator op = arg -> arg * x * y * priv;
+        LOG.info("" + op.getClass());
+        Stream.of(op.getClass().getDeclaredFields()).forEach(INFO);
+    }
+    // end::structureUnary[]
 
     @Test
     public void serialize() throws IOException, ClassNotFoundException {
         // tag::serialize[]
-        SerializableUnaryOperator op = (x, y) -> x * y;
+        SerializableDoubleBinaryOperator op = (x, y) -> x + y;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream stream = new ObjectOutputStream(baos);
         stream.writeObject(op);
         stream.flush();
         LOG.info("bytes: " + baos.toByteArray().length);
-        // Files.write(Paths.get("lambda"), baos.toByteArray());
+        // Files.write(Paths.get("src/test/resources/com/toughbyte/workshop/serialize.lambda"),
+        // baos.toByteArray());
 
         ObjectInputStream is = new ObjectInputStream(
                 new ByteArrayInputStream(baos.toByteArray()));
@@ -120,7 +147,7 @@ public class IntermissionTest {
         LOG.info("read: " + read);
         LOG.info(
                 "result: " + ((DoubleBinaryOperator) read).applyAsDouble(5, 6));
-        // tag::serialize[]
+        // end::serialize[]
     }
 
     @Test
@@ -133,13 +160,29 @@ public class IntermissionTest {
         LOG.info("read: " + read);
         LOG.info(
                 "result: " + ((DoubleBinaryOperator) read).applyAsDouble(5, 6));
-        // tag::deserialize[]
+        // end::deserialize[]
     }
 
+    @Test
+    public void nashorn() throws ScriptException {
+        // tag::nashorn[]
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("nashorn");
+        Bindings eval = (Bindings) engine.eval("f = function(name) { return name.length() }");
+        LOG.info("" + eval.getClass());
+        LOG.info("Length: " + engine.eval("f('hello')"));
+        // end::nashorn[]
+    }
+    
     // tag::serializable[]
-    public interface SerializableUnaryOperator
+    @FunctionalInterface
+    public interface SerializableDoubleBinaryOperator
             extends DoubleBinaryOperator, Serializable {
+    }
 
+    @FunctionalInterface
+    public interface SerializableDoubleUnaryOperator
+            extends DoubleUnaryOperator, Serializable {
     }
     // end::serializable[]
 }

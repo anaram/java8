@@ -1,0 +1,29 @@
+== Parallel Streams
+
+Parallel streams allow some stream operations to be performed concurrently
+
+Reading JavaDoc is useful to find out what stream operations are performed in encounter order
+
+=== Parallel forEach
+
+[source,java]
+----
+include::{testPackageDir}/ParallelStreamsTest.java[tags=parallelForEach,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=ParallelStreamsTest-parallelForEach]
+----
+
+=== Parallel Collect
+
+[source,java]
+----
+include::{testPackageDir}/ParallelStreamsTest.java[tags=parallelCollect,indent=0]
+----
+
+[source,java,role="fragment"]
+----
+include::{testPackageDir}/ParallelStreamsTest.java[tags=parallelCollect,indent=0]
+----

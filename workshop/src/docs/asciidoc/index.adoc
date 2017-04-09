@@ -3,3 +3,7 @@
 include::functional-interfaces.adoc[]
 
 include::streams.adoc[]
+
+include::streams-intermission.adoc[]
+
+include::parallel-streams.adoc[]
