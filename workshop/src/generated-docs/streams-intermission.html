@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><title>In Depth Look at Lambdas</title><meta content="yes" name="apple-mobile-web-app-capable" /><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport" /><link href="reveal.js-3.1.0/css/reveal.css" rel="stylesheet" /><link rel="stylesheet" href="reveal.js-3.1.0/css/theme/sky.css" id="theme" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" /><style>/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}</style><link href="reveal.js-3.1.0/lib/css/zenburn.css" rel="stylesheet" /><script>document.write( '<link rel="stylesheet" href="reveal.js-3.1.0/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section><section id="_in_depth_look_at_lambdas"><h2>In Depth Look at Lambdas</h2></section><section id="_anonymous_inner_class_structure"><h2>Anonymous Inner Class Structure</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">LongUnaryOperator op = <span class="keyword">new</span> LongUnaryOperator() {
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">long</span> applyAsLong(<span class="type">long</span> operand) {
+        <span class="keyword">return</span> operand + <span class="integer">3</span>;
+    }
+};
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">anonymous inner class: </span><span class="delimiter">&quot;</span></span> + op.getClass());
+
+<span class="predefined-type">Field</span><span class="type">[]</span> fields = op.getClass().getDeclaredFields();
+<span class="keyword">for</span> (<span class="predefined-type">Field</span> field : fields) {
+    LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">field: </span><span class="delimiter">&quot;</span></span> + field);
+}</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>anonymous inner class: class com.toughbyte.workshop.IntermissionTest$1
+field: final com.toughbyte.workshop.IntermissionTest com.toughbyte.workshop.IntermissionTest$1.this$0</code></pre></div></div>
+<div class="paragraph"><p>Has reference to containing class</p></div></section><section id="_lambda_structure"><h2>Lambda Structure</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">LongUnaryOperator op = val -&gt; val + <span class="integer">3</span>;
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">lambda: </span><span class="delimiter">&quot;</span></span> + op.getClass());
+
+<span class="predefined-type">Field</span><span class="type">[]</span> fields = op.getClass().getDeclaredFields();
+<span class="keyword">for</span> (<span class="predefined-type">Field</span> field : fields) {
+    LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">field: </span><span class="delimiter">&quot;</span></span> + field);
+}</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>lambda: class com.toughbyte.workshop.IntermissionTest$$Lambda$56/1663166483</code></pre></div></div>
+<div class="paragraph"><p>No reference to containing class</p></div></section><section id="_static_context"><h2>Static Context</h2><div class="paragraph"><p>Inner class in static context has no reference to parent object</p></div>
+<div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> staticContext() {
+    LongUnaryOperator op = <span class="keyword">new</span> LongUnaryOperator() {
+
+        <span class="annotation">@Override</span>
+        <span class="directive">public</span> <span class="type">long</span> applyAsLong(<span class="type">long</span> operand) {
+            <span class="keyword">return</span> operand + <span class="integer">3</span>;
+        }
+    };
+    LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">static: </span><span class="delimiter">&quot;</span></span> + op.getClass());
+
+    <span class="predefined-type">Field</span><span class="type">[]</span> fields = op.getClass().getDeclaredFields();
+    <span class="keyword">for</span> (<span class="predefined-type">Field</span> field : fields) {
+        LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">'static' anonymous inner class: </span><span class="delimiter">&quot;</span></span> + field);
+    }
+}</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>Hello World!
+static: class com.toughbyte.workshop.IntermissionTest$2</code></pre></div></div></section><section id="_let_s_not_copy_paste"><h2>Let&#8217;s not COPY-paste</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> Consumer&lt;<span class="predefined-type">Object</span>&gt; INFO = o -&gt; LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + o);
+Consumer&lt;<span class="predefined-type">Field</span>&gt; logger = (Consumer&lt;<span class="predefined-type">Field</span>&gt;) f -&gt; LOG
+        .info(<span class="string"><span class="delimiter">&quot;</span><span class="content">logged: </span><span class="delimiter">&quot;</span></span> + f);
+LongUnaryOperator op = val -&gt; val + <span class="integer">3</span>;
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + op.getClass());
+Stream.of(op.getClass().getDeclaredFields()).forEach(logger);</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class com.toughbyte.workshop.IntermissionTest$$Lambda$58/1468357786</code></pre></div></div></section><section id="_lambdas_with_fields"><h2>Lambdas With Fields</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">private</span> <span class="type">double</span> priv = <span class="float">1.0</span>;
+
+<span class="annotation">@Test</span>
+<span class="directive">public</span> <span class="type">void</span> structureUnary() {
+    <span class="type">double</span> x = <span class="float">1.0</span>;
+    <span class="type">long</span> y = <span class="integer">2</span>;
+    DoubleUnaryOperator op = arg -&gt; arg * x * y * priv;
+    LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + op.getClass());
+    Stream.of(op.getClass().getDeclaredFields()).forEach(INFO);
+}</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class com.toughbyte.workshop.IntermissionTest$$Lambda$59/520016214
+private final com.toughbyte.workshop.IntermissionTest com.toughbyte.workshop.IntermissionTest$$Lambda$59/520016214.arg$1
+private final double com.toughbyte.workshop.IntermissionTest$$Lambda$59/520016214.arg$2
+private final long com.toughbyte.workshop.IntermissionTest$$Lambda$59/520016214.arg$3</code></pre></div></div></section><section id="_serializing_lambdas"><h2>Serializing Lambdas</h2><div class="paragraph"><p>Lambdas can be serialized if the implemented interface is Serializable</p></div>
+<div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@FunctionalInterface</span>
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">SerializableDoubleBinaryOperator</span>
+        <span class="directive">extends</span> DoubleBinaryOperator, <span class="predefined-type">Serializable</span> {
+}
+
+<span class="annotation">@FunctionalInterface</span>
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">SerializableDoubleUnaryOperator</span>
+        <span class="directive">extends</span> DoubleUnaryOperator, <span class="predefined-type">Serializable</span> {
+}</code></pre></div></div></section><section><div class="listingblock"><div class="content"><pre class="CodeRay"><code>SerializableDoubleBinaryOperator op = (x, y) -&gt; x + y;
+ByteArrayOutputStream baos = new ByteArrayOutputStream();
+ObjectOutputStream stream = new ObjectOutputStream(baos);
+stream.writeObject(op);
+stream.flush();
+LOG.info("bytes: " + baos.toByteArray().length);
+// Files.write(Paths.get("src/test/resources/com/toughbyte/workshop/serialize.lambda"),
+// baos.toByteArray());
+
+ObjectInputStream is = new ObjectInputStream(
+        new ByteArrayInputStream(baos.toByteArray()));
+Object read = is.readObject();
+LOG.info("read: " + read);
+LOG.info(
+        "result: " + ((DoubleBinaryOperator) read).applyAsDouble(5, 6));</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>bytes: 630
+read: com.toughbyte.workshop.IntermissionTest$$Lambda$55/1241276575@cd2dae5
+result: 11.0</code></pre></div></div></section><section id="_deserialize_lambdas"><h2>Deserialize Lambdas</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">URL</span> resource = StreamsTest.class.getResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">serialize.lambda</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">InputStream</span> ris = resource.openStream();
+<span class="predefined-type">ObjectInputStream</span> is = <span class="keyword">new</span> <span class="predefined-type">ObjectInputStream</span>(ris);
+<span class="predefined-type">Object</span> read = is.readObject();
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">read: </span><span class="delimiter">&quot;</span></span> + read);
+LOG.info(
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">result: </span><span class="delimiter">&quot;</span></span> + ((DoubleBinaryOperator) read).applyAsDouble(<span class="integer">5</span>, <span class="integer">6</span>));</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>read: com.toughbyte.workshop.IntermissionTest$$Lambda$55/1241276575@cd2dae5
+result: 11.0</code></pre></div></div></section><section id="_nashorn"><h2>Nashorn</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ScriptEngineManager manager = <span class="keyword">new</span> ScriptEngineManager();
+ScriptEngine engine = manager.getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
+Bindings eval = (Bindings) engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">f = function(name) { return name.length() }</span><span class="delimiter">&quot;</span></span>);
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + eval.getClass());
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Length: </span><span class="delimiter">&quot;</span></span> + engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">f('hello')</span><span class="delimiter">&quot;</span></span>));</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class jdk.nashorn.api.scripting.ScriptObjectMirror
+Length: 5</code></pre></div></div></section></section></div></div><script src="reveal.js-3.1.0/lib/js/head.min.js"></script><script src="reveal.js-3.1.0/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: false,
+  // Push each slide change to the browser history
+  history: false,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: false,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'sky',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'linear',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: '',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 1200,
+  height: 800,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js-3.1.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js-3.1.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js-3.1.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      
+      { src: 'reveal.js-3.1.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js-3.1.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>

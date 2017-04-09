@@ -1,0 +1,10 @@
+[source,java]
+.code
+----
+include::{testPackageDir}/{testClass}[tags={test},indent=0]
+----
+
+.output
+----
+include::{testLog}[tags={testClass}-{test}]
+----
