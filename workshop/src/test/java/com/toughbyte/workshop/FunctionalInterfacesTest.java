@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.DoubleToLongFunction;
 import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -130,6 +131,16 @@ public class FunctionalInterfacesTest {
         IntUnaryOperator increment = i -> i + 1;
         LOG.info("Values: " + round.applyAsLong(5.8) + ", " + increment.applyAsInt(3));
         // end::primitive[]
+    }
+    
+    @Test
+    public void binary() {
+        // tag::binary[]
+        IntBinaryOperator operator = (l, r) -> l + r;
+        LOG.info("operator: " + operator.applyAsInt(5, 6));
+        IntBinaryOperator sum = Integer::sum;
+        LOG.info("sum:      " + sum.applyAsInt(5, 6));
+        // end::binary[]
     }
 
     @Test

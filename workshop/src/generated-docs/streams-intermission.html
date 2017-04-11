@@ -108,7 +108,7 @@ LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="
 <span class="keyword">for</span> (<span class="predefined-type">Field</span> field : fields) {
     LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">field: </span><span class="delimiter">&quot;</span></span> + field);
 }</code></pre></div></div>
-<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>lambda: class com.toughbyte.workshop.IntermissionTest$$Lambda$56/990398217</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>lambda: class com.toughbyte.workshop.IntermissionTest$$Lambda$61/2083117811</code></pre></div></div>
 <div class="paragraph"><p>No reference to containing class</p></div></section><section id="_static_context"><h2>Static Context</h2><div class="paragraph"><p>Inner class in static context has no reference to parent object</p></div>
 <div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> staticContext() {
     LongUnaryOperator op = <span class="keyword">new</span> LongUnaryOperator() {
@@ -131,7 +131,7 @@ Consumer&lt;<span class="predefined-type">Field</span>&gt; logger = (Consumer&lt
 LongUnaryOperator op = val -&gt; val + <span class="integer">3</span>;
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + op.getClass());
 Stream.of(op.getClass().getDeclaredFields()).forEach(logger);</code></pre></div></div>
-<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class com.toughbyte.workshop.IntermissionTest$$Lambda$58/520016214</code></pre></div></div></section><section id="_lambdas_with_fields"><h2>Lambdas With Fields</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">private</span> <span class="type">double</span> priv = <span class="float">1.0</span>;
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class com.toughbyte.workshop.IntermissionTest$$Lambda$63/1816757085</code></pre></div></div></section><section id="_lambdas_with_fields"><h2>Lambdas With Fields</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">private</span> <span class="type">double</span> priv = <span class="float">1.0</span>;
 
 <span class="annotation">@Test</span>
 <span class="directive">public</span> <span class="type">void</span> structureUnary() {
@@ -141,10 +141,10 @@ Stream.of(op.getClass().getDeclaredFields()).forEach(logger);</code></pre></div>
     LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + op.getClass());
     Stream.of(op.getClass().getDeclaredFields()).forEach(INFO);
 }</code></pre></div></div>
-<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class com.toughbyte.workshop.IntermissionTest$$Lambda$59/1757143877
-private final com.toughbyte.workshop.IntermissionTest com.toughbyte.workshop.IntermissionTest$$Lambda$59/1757143877.arg$1
-private final double com.toughbyte.workshop.IntermissionTest$$Lambda$59/1757143877.arg$2
-private final long com.toughbyte.workshop.IntermissionTest$$Lambda$59/1757143877.arg$3</code></pre></div></div></section><section id="_serializing_lambdas"><h2>Serializing Lambdas</h2><div class="paragraph"><p>Lambdas can be serialized if the implemented interface is Serializable</p></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class com.toughbyte.workshop.IntermissionTest$$Lambda$64/1568059495
+private final com.toughbyte.workshop.IntermissionTest com.toughbyte.workshop.IntermissionTest$$Lambda$64/1568059495.arg$1
+private final double com.toughbyte.workshop.IntermissionTest$$Lambda$64/1568059495.arg$2
+private final long com.toughbyte.workshop.IntermissionTest$$Lambda$64/1568059495.arg$3</code></pre></div></div></section><section id="_serializing_lambdas"><h2>Serializing Lambdas</h2><div class="paragraph"><p>Lambdas can be serialized if the implemented interface is Serializable</p></div>
 <div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@FunctionalInterface</span>
 <span class="directive">public</span> <span class="type">interface</span> <span class="class">SerializableDoubleBinaryOperator</span>
         <span class="directive">extends</span> DoubleBinaryOperator, <span class="predefined-type">Serializable</span> {
@@ -169,7 +169,7 @@ LOG.info("read: " + read);
 LOG.info(
         "result: " + ((DoubleBinaryOperator) read).applyAsDouble(5, 6));</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>bytes: 630
-read: com.toughbyte.workshop.IntermissionTest$$Lambda$55/1663166483@79be0360
+read: com.toughbyte.workshop.IntermissionTest$$Lambda$60/1757143877@30b8a058
 result: 11.0</code></pre></div></div></section><section id="_deserialize_lambdas"><h2>Deserialize Lambdas</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">URL</span> resource = StreamsTest.class.getResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">serialize.lambda</span><span class="delimiter">&quot;</span></span>);
 <span class="predefined-type">InputStream</span> ris = resource.openStream();
 <span class="predefined-type">ObjectInputStream</span> is = <span class="keyword">new</span> <span class="predefined-type">ObjectInputStream</span>(ris);
@@ -177,10 +177,56 @@ result: 11.0</code></pre></div></div></section><section id="_deserialize_lambdas
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">read: </span><span class="delimiter">&quot;</span></span> + read);
 LOG.info(
         <span class="string"><span class="delimiter">&quot;</span><span class="content">result: </span><span class="delimiter">&quot;</span></span> + ((DoubleBinaryOperator) read).applyAsDouble(<span class="integer">5</span>, <span class="integer">6</span>));</code></pre></div></div>
-<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>read: com.toughbyte.workshop.IntermissionTest$$Lambda$55/1663166483@79be0360
-result: 11.0</code></pre></div></div></section><section id="_nashorn"><h2>Nashorn</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ScriptEngineManager manager = <span class="keyword">new</span> ScriptEngineManager();
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>read: com.toughbyte.workshop.IntermissionTest$$Lambda$60/1757143877@30b8a058
+result: 11.0</code></pre></div></div>
+<div class="paragraph"><div class="title">fragment</div><p>Let&#8217;s edit source code a little</p></div></section><section id="_uncheckedrunnable"><h2>UncheckedRunnable</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@FunctionalInterface</span>
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">UncheckedRunnable</span> <span class="directive">extends</span> <span class="predefined-type">Runnable</span> {
+    <span class="directive">public</span> <span class="type">void</span> runChecked() <span class="directive">throws</span> <span class="exception">Exception</span>;
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="keyword">default</span> <span class="type">void</span> run() {
+        <span class="keyword">try</span> {
+            runChecked();
+        } <span class="keyword">catch</span> (<span class="exception">IOException</span> e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> UncheckedIOException(e);
+        } <span class="keyword">catch</span> (<span class="exception">Exception</span> e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">RuntimeException</span>(e);
+        }
+    }
+}</code></pre></div></div></section><section id="_uncheckedfunction"><h2>UncheckedFunction</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="annotation">@FunctionalInterface</span>
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">UncheckedFunction</span>&lt;T, R&gt; <span class="directive">extends</span> Function&lt;T, R&gt; {
+    <span class="directive">public</span> R applyChecked(T Arg) <span class="directive">throws</span> <span class="exception">Exception</span>;
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="keyword">default</span> R apply(T arg) {
+        <span class="keyword">try</span> {
+            <span class="keyword">return</span> applyChecked(arg);
+        } <span class="keyword">catch</span> (<span class="exception">IOException</span> e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> UncheckedIOException(e);
+        } <span class="keyword">catch</span> (<span class="exception">Exception</span> e) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">RuntimeException</span>(e);
+        }
+    }
+}</code></pre></div></div></section><section id="_helper_class"><h2>Helper class</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">Unchecked</span> {
+    <span class="directive">public</span> <span class="directive">static</span> <span class="predefined-type">Runnable</span> runnable(UncheckedRunnable r) {
+        <span class="keyword">return</span> r;
+    }
+
+    <span class="directive">public</span> <span class="directive">static</span> &lt;T, R&gt; Function&lt;T, R&gt; function(
+            UncheckedFunction&lt;T, R&gt; f) {
+        <span class="keyword">return</span> f;
+    }
+}</code></pre></div></div></section><section id="_wrapping_exception"><h2>Wrapping Exception</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">Path path = <span class="keyword">new</span> <span class="predefined-type">File</span>(IntermissionTest.class.getResource(<span class="string"><span class="delimiter">&quot;</span><span class="content">.</span><span class="delimiter">&quot;</span></span>).getFile())
+        .toPath();
+Files.list(path).map(Unchecked.function(Files::getLastModifiedTime)).limit(<span class="integer">3</span>)
+        .forEach(lm -&gt; LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Modified: </span><span class="delimiter">&quot;</span></span> + lm));</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>Modified: 2017-04-11T16:34:48.471403Z
+Modified: 2017-04-02T10:28:13.075926Z
+Modified: 2017-04-02T10:28:13.060299Z</code></pre></div></div>
+<div class="paragraph"><div class="title">fragment</div><p>Let&#8217;s edit source code a little</p></div></section><section id="_nashorn"><h2>Nashorn</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ScriptEngineManager manager = <span class="keyword">new</span> ScriptEngineManager();
 ScriptEngine engine = manager.getEngineByName(<span class="string"><span class="delimiter">&quot;</span><span class="content">nashorn</span><span class="delimiter">&quot;</span></span>);
-Bindings eval = (Bindings) engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">f = function(name) { return name.length() }</span><span class="delimiter">&quot;</span></span>);
+Bindings eval = (Bindings) engine
+        .eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">f = function(name) { return name.length() }</span><span class="delimiter">&quot;</span></span>);
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + eval.getClass());
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Length: </span><span class="delimiter">&quot;</span></span> + engine.eval(<span class="string"><span class="delimiter">&quot;</span><span class="content">f('hello')</span><span class="delimiter">&quot;</span></span>));</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>class jdk.nashorn.api.scripting.ScriptObjectMirror

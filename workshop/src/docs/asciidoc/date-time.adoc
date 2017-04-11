@@ -111,6 +111,19 @@ include::{testPackageDir}/DateTimeTests.java[tags=helsinki1917,indent=0]
 include::{testLog}[tags=DateTimeTests-helsinki1917]
 ----
 
+=== Issues With TZs
+
+What could go wrong when parsing in wrong zone?
+
+.fragment
+What if specific time does not exist in the given zone?
+
+.fragment
+What if time zone does not exist anymore?
+
+.fragment
+You could try at 04:30 when summer time begins.
+
 === Understand Time Zones (2)
 
 [source,java]
@@ -135,6 +148,21 @@ include::{testPackageDir}/DateTimeTests.java[tags=adjusting,indent=0]
 include::{testLog}[tags=DateTimeTests-adjusting]
 ----
 
+=== Chrono*
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=chrono,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-chrono]
+----
+
+.fragment
+Try other enum fields.
+
 === Lenient Parsing
 
 [source,java]
@@ -146,3 +174,37 @@ include::{testPackageDir}/DateTimeTests.java[tags=lenient,indent=0]
 ----
 include::{testLog}[tags=DateTimeTests-lenient]
 ----
+
+=== Adjust Lenient Parsing
+
+.fragment
+Try parsing/formatting other dates
+
+.fragment
+Can help make test cases more readable
+
+.fragment
+Try to add nanoseconds
+
+=== At Day
+
+[source,java]
+----
+include::{testPackageDir}/DateTimeTests.java[tags=atDay,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=DateTimeTests-atDay]
+----
+
+.fragment
+Try invalid day.
+
+=== Exercises
+
+Add column for date
+
+Add column for time
+
+Add column for time zone

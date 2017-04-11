@@ -33,6 +33,17 @@ public class UnsignedMathTests {
                 .toUnsignedString(Integer.divideUnsigned(unsignedInt, 2))));
         // end::divide[]
     }
+    
+    @Test
+    public void remainder() {
+        // tag::remainder[]
+        int unsignedInt = Integer.parseUnsignedInt("3000000000");
+        LOG.info(String.format("Signed:   %s",
+                Integer.toUnsignedString(unsignedInt % 31)));
+        LOG.info(String.format("Unsigned: %s", Integer
+                .toUnsignedString(Integer.remainderUnsigned(unsignedInt, 31))));
+        // end::remainder[]
+    }
 
     @Test(expected = NumberFormatException.class)
     public void failParseSignedInt() {

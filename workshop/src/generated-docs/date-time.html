@@ -135,7 +135,10 @@ ZonedDateTime when = parser.withZone(zone).parse(<span class="string"><span clas
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">When: </span><span class="delimiter">&quot;</span></span> + when);
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">When: </span><span class="delimiter">&quot;</span></span> + when.withZoneSameInstant(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">GMT</span><span class="delimiter">&quot;</span></span>)));</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>When: 1917-12-06T12:00+01:39:49[Europe/Helsinki]
-When: 1917-12-06T10:20:11Z[GMT]</code></pre></div></div></section><section id="_understand_time_zones_2"><h2>Understand Time Zones (2)</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ZoneId zone = ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">Europe/Helsinki</span><span class="delimiter">&quot;</span></span>);
+When: 1917-12-06T10:20:11Z[GMT]</code></pre></div></div></section><section id="_issues_with_tzs"><h2>Issues With TZs</h2><div class="paragraph"><p>What could go wrong when parsing in wrong zone?</p></div>
+<div class="paragraph"><div class="title">fragment</div><p>What if specific time does not exist in the given zone?</p></div>
+<div class="paragraph"><div class="title">fragment</div><p>What if time zone does not exist anymore?</p></div>
+<div class="paragraph"><div class="title">fragment</div><p>You could try at 04:30 when summer time begins.</p></div></section><section id="_understand_time_zones_2"><h2>Understand Time Zones (2)</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ZoneId zone = ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">Europe/Helsinki</span><span class="delimiter">&quot;</span></span>);
 ZonedDateTime when = parser.withZone(zone).parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">2017-12-06T12:00:00</span><span class="delimiter">&quot;</span></span>,
         ZonedDateTime::from);
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">When: </span><span class="delimiter">&quot;</span></span> + when);
@@ -145,18 +148,52 @@ When: 2017-12-06T10:00Z[GMT]</code></pre></div></div></section><section id="_adj
         .parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">2017-12-06T12:00:00</span><span class="delimiter">&quot;</span></span>, ZonedDateTime::from);
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adjusted: </span><span class="delimiter">&quot;</span></span> + when.plus(-<span class="integer">4</span>, ChronoUnit.HOURS));
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Original: </span><span class="delimiter">&quot;</span></span> + when);
-LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Reyear: </span><span class="delimiter">&quot;</span></span> + Year.of(<span class="integer">1917</span>).adjustInto(
-        when.withZoneSameLocal(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">Europe/Helsinki</span><span class="delimiter">&quot;</span></span>))));</code></pre></div></div>
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">sameLocal: </span><span class="delimiter">&quot;</span></span> + Year.of(<span class="integer">1917</span>).adjustInto(
+        when.withZoneSameLocal(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">Europe/Helsinki</span><span class="delimiter">&quot;</span></span>))));
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">sameInstant: </span><span class="delimiter">&quot;</span></span> + Year.of(<span class="integer">1917</span>).adjustInto(
+        when.withZoneSameInstant(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">Europe/Helsinki</span><span class="delimiter">&quot;</span></span>))));</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>Adjusted: 2017-12-06T08:00Z[GMT]
 Original: 2017-12-06T12:00Z[GMT]
-Reyear: 1917-12-06T12:00+01:39:49[Europe/Helsinki]</code></pre></div></div></section><section id="_lenient_parsing"><h2>Lenient Parsing</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">DateTimeFormatter lenient = DateTimeFormatter
+sameLocal: 1917-12-06T12:00+01:39:49[Europe/Helsinki]
+sameInstant: 1917-12-06T14:00+01:39:49[Europe/Helsinki]</code></pre></div></div></section><section id="_chrono"><h2>Chrono*</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">DateTimeFormatter lenient = DateTimeFormatter
         .ofPattern(<span class="string"><span class="delimiter">&quot;</span><span class="content">yyyy[-MM[-dd['T'HH[:mm[:ss[.SSS]]]]]][ ][Z]</span><span class="delimiter">&quot;</span></span>)
         .withZone(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">GMT</span><span class="delimiter">&quot;</span></span>));
-YearMonth yearMonth = lenient.parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">2017-02</span><span class="delimiter">&quot;</span></span>, YearMonth::from);
+LocalDateTime field = lenient.parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">2017-01-01T00:00:00</span><span class="delimiter">&quot;</span></span>,
+        LocalDateTime::from);
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + field.with(ChronoField.EPOCH_DAY, <span class="integer">600</span>));
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + field.plus(<span class="integer">1</span>, ChronoUnit.DAYS));
+LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + field.plus(<span class="integer">10</span>, ChronoUnit.HALF_DAYS));</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>1971-08-24T00:00
+2017-01-02T00:00
+2017-01-06T00:00</code></pre></div></div>
+<div class="paragraph"><div class="title">fragment</div><p>Try other enum fields.</p></div></section><section id="_lenient_parsing"><h2>Lenient Parsing</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">DateTimeFormatter lenient = DateTimeFormatter
+        .ofPattern(<span class="string"><span class="delimiter">&quot;</span><span class="content">yyyy[-MM[-dd['T'HH[:mm[:ss[.SSS]]]]]][ ][Z]</span><span class="delimiter">&quot;</span></span>)
+        .withZone(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">GMT</span><span class="delimiter">&quot;</span></span>));
+TemporalAccessor parsed = lenient.parseBest(<span class="string"><span class="delimiter">&quot;</span><span class="content">2017-02</span><span class="delimiter">&quot;</span></span>,
+        ZonedDateTime::from, LocalDateTime::from, LocalDate::from,
+        YearMonth::from, Year::from);
+
+Instant instant;
+<span class="keyword">if</span> (parsed <span class="keyword">instanceof</span> TemporalAdjuster) {
+    ZonedDateTime epoch = Instant.ofEpochMilli(<span class="integer">0</span>)
+            .atZone(ZoneId.of(<span class="string"><span class="delimiter">&quot;</span><span class="content">GMT</span><span class="delimiter">&quot;</span></span>));
+    TemporalAdjuster adjuster = (TemporalAdjuster) parsed;
+    instant = Instant.from(adjuster.adjustInto(epoch));
+} <span class="keyword">else</span> {
+    instant = Instant.from(parsed);
+}
+
+LOG.info(lenient.format(instant));</code></pre></div></div>
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>2017-02-01T00:00:00.000 +0000</code></pre></div></div></section><section id="_adjust_lenient_parsing"><h2>Adjust Lenient Parsing</h2><div class="paragraph"><div class="title">fragment</div><p>Try parsing/formatting other dates</p></div>
+<div class="paragraph"><div class="title">fragment</div><p>Can help make test cases more readable</p></div>
+<div class="paragraph"><div class="title">fragment</div><p>Try to add nanoseconds</p></div></section><section id="_at_day"><h2>At Day</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">YearMonth yearMonth = lenient.parse(<span class="string"><span class="delimiter">&quot;</span><span class="content">2017-02</span><span class="delimiter">&quot;</span></span>, YearMonth::from);
 LOG.info(lenient.format(yearMonth.atDay(<span class="integer">7</span>)));
-LOG.info(lenient.format(yearMonth.atDay(<span class="integer">7</span>).atTime(<span class="integer">12</span>, <span class="integer">5</span>, <span class="integer">7</span>)));</code></pre></div></div>
+LOG.info(lenient.format(yearMonth.atDay(<span class="integer">21</span>).atTime(<span class="integer">12</span>, <span class="integer">5</span>, <span class="integer">7</span>)));</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>2017-02-07
-2017-02-07T12:05:07.000</code></pre></div></div></section></section></div></div><script src="reveal.js-3.1.0/lib/js/head.min.js"></script><script src="reveal.js-3.1.0/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+2017-02-21T12:05:07.000</code></pre></div></div>
+<div class="paragraph"><div class="title">fragment</div><p>Try invalid day.</p></div></section><section id="_exercises"><h2>Exercises</h2><div class="paragraph"><p>Add column for date</p></div>
+<div class="paragraph"><p>Add column for time</p></div>
+<div class="paragraph"><p>Add column for time zone</p></div></section></section></div></div><script src="reveal.js-3.1.0/lib/js/head.min.js"></script><script src="reveal.js-3.1.0/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
   controls: true,

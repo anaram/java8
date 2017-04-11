@@ -1,0 +1,25 @@
+== Introduction
+
+9.00 Java8 overview
+
+9.40 Functional Interfaces pt 1
+
+10.20 Functional interfaces pt 2
+
+11.00 Streams p1 1
+
+12.00 lunch break
+
+=== After lunch
+
+13.00 Streams pt 2
+
+13.40 Streams pt 3
+
+14.20 Streams pt 4
+
+15.00 Date and Time
+
+15.40 Unsigned Arithmetic
+
+16.20 Final items / Discussion / Interests

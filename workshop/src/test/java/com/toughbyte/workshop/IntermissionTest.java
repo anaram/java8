@@ -2,16 +2,17 @@ package com.toughbyte.workshop;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Reader;
 import java.io.Serializable;
-import java.io.Writer;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -20,11 +21,9 @@ import java.util.function.LongUnaryOperator;
 import java.util.stream.Stream;
 
 import javax.script.Bindings;
-import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import javax.script.SimpleScriptContext;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -164,16 +163,76 @@ public class IntermissionTest {
     }
 
     @Test
+    public void unchecked() throws IOException {
+        // tag::unchecked[]
+        Path path = new File(IntermissionTest.class.getResource(".").getFile())
+                .toPath();
+        Files.list(path).map(Unchecked.function(Files::getLastModifiedTime)).limit(3)
+                .forEach(lm -> LOG.info("Modified: " + lm));
+        // end::unchecked[]
+    }
+
+    // tag::UncheckedRunnable[]
+    @FunctionalInterface
+    public interface UncheckedRunnable extends Runnable {
+        public void runChecked() throws Exception;
+
+        @Override
+        public default void run() {
+            try {
+                runChecked();
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    // end::UncheckedRunnable[]
+
+    // tag::UncheckedFunction[]
+    @FunctionalInterface
+    public interface UncheckedFunction<T, R> extends Function<T, R> {
+        public R applyChecked(T Arg) throws Exception;
+
+        @Override
+        public default R apply(T arg) {
+            try {
+                return applyChecked(arg);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    // end::UncheckedFunction[]
+
+    // tag::Unchecked[]
+    public static class Unchecked {
+        public static Runnable runnable(UncheckedRunnable r) {
+            return r;
+        }
+
+        public static <T, R> Function<T, R> function(
+                UncheckedFunction<T, R> f) {
+            return f;
+        }
+    }
+    // end::Unchecked[]
+
+    @Test
     public void nashorn() throws ScriptException {
         // tag::nashorn[]
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("nashorn");
-        Bindings eval = (Bindings) engine.eval("f = function(name) { return name.length() }");
+        Bindings eval = (Bindings) engine
+                .eval("f = function(name) { return name.length() }");
         LOG.info("" + eval.getClass());
         LOG.info("Length: " + engine.eval("f('hello')"));
         // end::nashorn[]
     }
-    
+
     // tag::serializable[]
     @FunctionalInterface
     public interface SerializableDoubleBinaryOperator

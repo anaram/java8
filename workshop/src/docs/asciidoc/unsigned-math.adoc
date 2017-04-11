@@ -32,6 +32,22 @@ include::{testPackageDir}/UnsignedMathTests.java[tags=divide,indent=0]
 include::{testLog}[tags=UnsignedMathTests-divide]
 ----
 
+=== Remainder
+
+[source,java]
+----
+include::{testPackageDir}/UnsignedMathTests.java[tags=remainder,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=UnsignedMathTests-remainder]
+----
+
+=== Plus, minus, multiply
+
+What about those?
+
 === Failed Parse (signed)
 
 [source,java]

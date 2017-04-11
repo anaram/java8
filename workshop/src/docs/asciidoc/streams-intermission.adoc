@@ -100,6 +100,45 @@ include::{testPackageDir}/IntermissionTest.java[tags=deserialize,indent=0]
 include::{testLog}[tags=IntermissionTest-deserialize]
 ----
 
+.fragment
+Let's edit source code a little
+
+=== UncheckedRunnable
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=UncheckedRunnable,indent=0]
+----
+
+=== UncheckedFunction
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=UncheckedFunction,indent=0]
+----
+
+=== Helper class
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=Unchecked,indent=0]
+----
+
+=== Wrapping Exception
+
+[source,java]
+----
+include::{testPackageDir}/IntermissionTest.java[tags=unchecked,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=IntermissionTest-unchecked]
+----
+
+.fragment
+Let's edit source code a little
+
 === Nashorn
 
 [source,java]

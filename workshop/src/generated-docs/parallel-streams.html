@@ -92,7 +92,7 @@ StreamSupport.stream(<span class="predefined-type">Arrays</span>.asList(<span cl
 <span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
 IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEach(result::add);
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);</code></pre></div></div>
-<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[5, 7, 2, 3, 6, 4, 1, 0]</code></pre></div></div></section><section id="_foreachordered"><h2>forEachOrdered</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
+<div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[5, 7, 2, 6, 4, 3, 1, 0]</code></pre></div></div></section><section id="_foreachordered"><h2>forEachOrdered</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = <span class="predefined-type">Collections</span>.synchronizedList(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;());
 IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel().forEachOrdered(result::add);
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + result);</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>[0, 1, 2, 3, 4, 5, 6, 7]</code></pre></div></div></section><section id="_parallel_collect"><h2>Parallel Collect</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">Integer</span>&gt; result = IntStream.range(<span class="integer">0</span>, <span class="integer">8</span>).parallel()
@@ -109,12 +109,12 @@ LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="
 });</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>main
 ForkJoinPool.commonPool-worker-1
-ForkJoinPool.commonPool-worker-3
 ForkJoinPool.commonPool-worker-2
 main
-ForkJoinPool.commonPool-worker-1
 ForkJoinPool.commonPool-worker-3
-ForkJoinPool.commonPool-worker-2</code></pre></div></div></section><section id="_custom_forkjoinpool"><h2>Custom ForkJoinPool</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(<span class="integer">2</span>);
+ForkJoinPool.commonPool-worker-1
+ForkJoinPool.commonPool-worker-2
+main</code></pre></div></div></section><section id="_custom_forkjoinpool"><h2>Custom ForkJoinPool</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">ForkJoinPool pool = <span class="keyword">new</span> ForkJoinPool(<span class="integer">2</span>);
 ForkJoinTask&lt;?&gt; task = pool.submit(() -&gt; {
     LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adding in thread: </span><span class="delimiter">&quot;</span></span> + <span class="predefined-type">Thread</span>.currentThread().getName());
     IntStream.range(<span class="integer">0</span>, <span class="integer">4</span>).parallel().forEach(i -&gt; {
@@ -124,9 +124,9 @@ ForkJoinTask&lt;?&gt; task = pool.submit(() -&gt; {
 task.join();</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>Adding in thread: ForkJoinPool-1-worker-1
 ForkJoinPool-1-worker-1
-ForkJoinPool-1-worker-1
-ForkJoinPool-1-worker-1
-ForkJoinPool-1-worker-0</code></pre></div></div></section><section id="_statistics_on_parallel_streams"><h2>Statistics on parallel streams</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">IntSummaryStatistics statistics = IntStream.range(<span class="integer">0</span>, <span class="integer">9876</span>).parallel()
+ForkJoinPool-1-worker-0
+ForkJoinPool-1-worker-0
+ForkJoinPool-1-worker-1</code></pre></div></div></section><section id="_statistics_on_parallel_streams"><h2>Statistics on parallel streams</h2><div class="listingblock"><div class="content"><pre class="CodeRay"><code class="java language-java">IntSummaryStatistics statistics = IntStream.range(<span class="integer">0</span>, <span class="integer">9876</span>).parallel()
         .summaryStatistics();
 LOG.info(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> + statistics);</code></pre></div></div>
 <div class="listingblock"><div class="title">output</div><div class="content"><pre class="CodeRay"><code>IntSummaryStatistics{count=9876, sum=48762750, min=0, average=4937.500000, max=9875}</code></pre></div></div></section></section></div></div><script src="reveal.js-3.1.0/lib/js/head.min.js"></script><script src="reveal.js-3.1.0/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options

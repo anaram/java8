@@ -138,7 +138,7 @@ public class StreamsTest {
         Map<String, List<Tuple>> mapped = list.stream()
                 .collect(Collectors.groupingBy(Tuple::getKey));
 
-        LOG.info("" + mapped);
+        mapped.forEach((k, v) -> LOG.info(k + " -> " + v));
         // end::groupingList[]
     }
 
@@ -224,6 +224,11 @@ public class StreamsTest {
 
         public void setValue(int value) {
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Tuple [key=" + key + ", value=" + value + "]";
         }
     }
     // end::tuple[]

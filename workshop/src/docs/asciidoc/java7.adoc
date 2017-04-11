@@ -1,0 +1,13 @@
+== What happened in Java 7
+
+Nonblocking IO
+
+String switch
+
+Path vs File
+
+Diamond operator
+
+Try with resource (AutoCloseable)
+
+Multicatch

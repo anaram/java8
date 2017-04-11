@@ -53,6 +53,9 @@ In Java8 becomes...
 include::{testPackageDir}/FunctionalInterfacesTest.java[tags=threadAfter,indent=0]
 ----
 
+[role="fragment"]
+Runnable is the target type
+
 === How Streams Look
 
 [source,java]
@@ -185,6 +188,19 @@ include::{testPackageDir}/FunctionalInterfacesTest.java[tags=primitive,indent=0]
 include::{testLog}[tags=FunctionalInterfacesTest-primitive]
 ----
 
+=== Operator Names
+
+.code
+[source,java]
+----
+include::{testPackageDir}/FunctionalInterfacesTest.java[tags=binary,indent=0]
+----
+
+.output
+----
+include::{testLog}[tags=FunctionalInterfacesTest-binary]
+----
+
 === Using Local Variables
 
 .code
@@ -197,6 +213,9 @@ include::{testPackageDir}/FunctionalInterfacesTest.java[tags=local,indent=0]
 ----
 include::{testLog}[tags=FunctionalInterfacesTest-local]
 ----
+
+.fragment
+... local variable must be *effectively* final
 
 === Syntax
 

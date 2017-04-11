@@ -12,6 +12,26 @@ Can be made from collections or with generators
 [.fragment]
 Can be parallel
 
+=== Supporting changes
+
+Many new `default` methods were added in existing interfaces
+
+.fragment
+Also: static methods in interfaces
+
+.fragment
+Conflicting default methods?
+
+=== Other considerations
+
+Signatures do not contain checked functions
+
+.fragment
+Debugger might not be as good as for loop, for example
+
+.fragment
+Stack trace might be more difficult to read
+
 === Example Stream
 
 .code
@@ -36,6 +56,14 @@ include::{testPackageDir}/StreamsTest.java[tags=collect-1,indent=0]
 ----
 include::{testPackageDir}/StreamsTest.java[tags=collect-2,indent=0]
 ----
+
+=== Why not Collection.map?
+
+.fragment
+Transparency
+
+.fragment
+Performance
 
 === Reduce
 
@@ -86,7 +114,7 @@ include::{testPackageDir}/StreamsTest.java[tags=groupingList,indent=0]
 include::{testLog}[tags=StreamsTest-groupingList]
 ----
 
-ifdef::backend-revealjs[=== !]
+=== Grouping (Reduce)
 
 .code
 [source,java]
@@ -99,7 +127,7 @@ include::{testPackageDir}/StreamsTest.java[tags=groupingReduce,indent=0]
 include::{testLog}[tags=StreamsTest-groupingReduce]
 ----
 
-=== Grouping>Partitioning
+=== Grouping (Partition)
 
 .code
 [source,java]

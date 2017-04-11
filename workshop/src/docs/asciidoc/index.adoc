@@ -1,5 +1,9 @@
 = Toughbyte Java 8 Workshop
 
+include::intro.adoc[]
+
+include::java7.adoc[]
+
 include::functional-interfaces.adoc[]
 
 include::streams.adoc[]
